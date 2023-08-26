@@ -18,3 +18,8 @@ module "subnets" {
   name = each.value["name"]
   azs = each.value["azs"]
 }
+
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.main.id
+  tags = merge(var.tags, { Name = "${var.env}-igw" })
+}
