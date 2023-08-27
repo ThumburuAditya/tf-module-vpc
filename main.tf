@@ -19,7 +19,7 @@ module "subnets" {
   azs = each.value["azs"]
 }
 
-resource "aws_internet_gateway" "gw" {
+resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
   tags = merge(var.tags, { Name = "${var.env}-igw" })
 }
@@ -40,7 +40,7 @@ resource "aws_nat_gateway" "ngw" {
 resource "aws_route" "igw" {
   count = length(module.subnets["public"].route_table_ids)
   route_table_id = module.subnets["public"].route_table_ids[count.index]
-  gateway_id = aws_internet_gateway.gw.id
+  gateway_id = aws_internet_gateway.igw.id
   destination_cidr_block = "0.0.0.0/0"
 }
 
